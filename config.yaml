@@ -1,0 +1,60 @@
+agent:
+  name: XiaoHei
+  version: 1.0.0
+  debug: false
+  log_level: INFO
+
+web:
+  host: 0.0.0.0
+  port: 3721
+  enable_websocket: true
+
+mcp:
+  host: localhost
+  port: 8080
+
+database:
+  path: ./data/example_db.sqlite
+  memory_path: ./data/memory.db
+
+providers:
+  openai:
+    api_key: ${OPENAI_API_KEY}
+    base_url: https://api.openai.com/v1
+    model: gpt-4o-mini
+  deepseek:
+    api_key: ${DEEPSEEK_API_KEY}
+    base_url: https://api.deepseek.com/v1
+    model: deepseek-chat
+  claude:
+    api_key: ${CLAUDE_API_KEY}
+    base_url: https://api.anthropic.com/v1
+    model: claude-3-sonnet-20240229
+
+limits:
+  max_tokens: 4096
+  max_time: 300
+  max_cost: 10.0
+  max_concurrent_tasks: 10
+
+budget:
+  soft_limit_percent: 0.8
+  expansion_percent: 0.3
+
+runtime:
+  mode: warm
+  state_compression_threshold: 1000
+
+sandbox:
+  work_dir: ./sandbox
+  profile: sandbox
+
+logging:
+  level: INFO
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}"
+  rotation: 1 day
+  retention: 7 days
+
+tracing:
+  enabled: true
+  otel_endpoint: null

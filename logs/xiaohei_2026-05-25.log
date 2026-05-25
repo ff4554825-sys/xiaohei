@@ -1,0 +1,54 @@
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.event_bus:__init__:12 - EventBus initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.fsm:__init__:78 - FSM Engine initialized, current phase: AgentPhase.IDLE
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.governance:__init__:15 - Governance initialized with 7 rules
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.policy:__init__:15 - PolicyController initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.budget:__init__:14 - BudgetManager initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.contracts:__init__:16 - ModuleContracts initialized with 12 contracts
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.runtime_policy:__init__:14 - RuntimePolicy initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.cron_scheduler:__init__:30 - CronScheduler initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.lifecycle:__init__:14 - LifecycleManager initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.credentials:__init__:12 - CredentialPool initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.data.memory_store:__init__:15 - MemoryStore initialized with db: ./data/memory.db
+2026-05-25 21:17:55 | INFO     | src.xiaohei.data.memory_os:__init__:17 - MemoryOS initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.context_engine:__init__:32 - ContextEngine initialized with 0 providers
+2026-05-25 21:17:55 | INFO     | src.xiaohei.data.context_gatherer:__init__:12 - ContextGatherer initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.data.compressor:__init__:10 - Compressor initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.data.checkpoint_os:_load_checkpoints:38 - Loaded 0 checkpoints
+2026-05-25 21:17:55 | INFO     | src.xiaohei.data.checkpoint_os:__init__:18 - CheckpointOS initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.task_parser:__init__:10 - TaskParser initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.planner:__init__:11 - Planner initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.failure_classifier:__init__:10 - FailureClassifier initialized with 10 patterns
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.critic:__init__:10 - Critic initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.control_decider:__init__:9 - ControlDecider initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.reflector:__init__:10 - Reflector initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.degradation:__init__:27 - DegradationManager initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.tool_registry:__init__:13 - ToolRegistry initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.agent_runtime:__init__:15 - AgentRuntime initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.execution.executor:__init__:13 - Executor initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.execution.capability_graph:__init__:11 - CapabilityGraph initialized with 16 capabilities
+2026-05-25 21:17:55 | INFO     | src.xiaohei.execution.mcp_bus:__init__:15 - MCPBus initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.execution.sandbox:__init__:21 - Sandbox initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.execution.skill_library:__init__:16 - SkillLibrary initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.execution.skill_system:__init__:14 - SkillSystem initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.validation.syntax_check:__init__:10 - SyntaxCheck initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.validation.semantic_check:__init__:10 - SemanticCheck initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.validation.runtime_check:__init__:10 - RuntimeCheck initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.validation.policy_check:__init__:12 - PolicyCheck initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.observability.trace:__init__:14 - TraceManager initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.observability.metrics:__init__:15 - MetricsManager initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.fsm:__init__:78 - FSM Engine initialized, current phase: AgentPhase.IDLE
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.fsm:__init__:78 - FSM Engine initialized, current phase: AgentPhase.IDLE
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.fsm:transition:116 - Phase transition: AgentPhase.IDLE -> AgentPhase.PARSE_TASK
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.fsm:__init__:78 - FSM Engine initialized, current phase: AgentPhase.IDLE
+2026-05-25 21:17:55 | WARNING  | src.xiaohei.control.fsm:validate_transition:84 - Invalid transition from AgentPhase.IDLE to AgentPhase.EXECUTE
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.task_parser:__init__:10 - TaskParser initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.task_parser:parse:38 - Task parsed: 50f38127-bfee-43c8-9a39-ebf38fd658af - information
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.task_parser:__init__:10 - TaskParser initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.task_parser:parse:38 - Task parsed: e8664072-dc5e-4bb4-b043-79000f8512eb - information
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.task_parser:__init__:10 - TaskParser initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.task_parser:parse:38 - Task parsed: 3f53ce06-93cf-4dfb-8c1c-e58060e495fa - information
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.planner:__init__:11 - Planner initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.planner:diverge:36 - Generated 2 plans for task: 8ad8bc2d-7c32-4a3b-a8c7-5c1d7a490875
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.planner:__init__:11 - Planner initialized
+2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.planner:diverge:36 - Generated 2 plans for task: 087b1e50-08fc-43c8-9645-cfcac5f3a42f
+2026-05-25 21:17:55 | INFO     | src.xiaohei.control.event_bus:__init__:12 - EventBus initialized
