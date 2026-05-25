@@ -1,0 +1,28 @@
+site_name: 小黑 (XiaoHei) Agent OS
+site_description: 状态机驱动的 AI 原生运行时
+site_url: https://ff4554825-sys.github.io/xiaohei
+repo_url: https://github.com/ff4554825-sys/xiaohei
+repo_name: ff4554825-sys/xiaohei
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - content.code.copy
+
+nav:
+  - 首页: index.md
+  - 快速开始: quickstart.md
+  - 架构: architecture.md
+  - API 参考: api.md
+  - 部署: deployment.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - admonition
+  - codehilite
