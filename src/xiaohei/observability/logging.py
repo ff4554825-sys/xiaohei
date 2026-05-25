@@ -9,7 +9,7 @@ class LoggingManager:
     def __init__(self, level: str = "INFO", event_bus=None):
         self._event_bus = event_bus
         self._configure_logger(level)
-        logger.info("LoggingManager initialized")
+        loguru_logger.info("LoggingManager initialized")
 
     def _configure_logger(self, level: str):
         loguru_logger.remove()

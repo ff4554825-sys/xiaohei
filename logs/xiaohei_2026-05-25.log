@@ -52,3 +52,59 @@
 2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.planner:__init__:11 - Planner initialized
 2026-05-25 21:17:55 | INFO     | src.xiaohei.cognition.planner:diverge:36 - Generated 2 plans for task: 087b1e50-08fc-43c8-9645-cfcac5f3a42f
 2026-05-25 21:17:55 | INFO     | src.xiaohei.control.event_bus:__init__:12 - EventBus initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.observability.logging:__init__:12 - LoggingManager initialized
+2026-05-25 22:13:13 | WARNING  | src.xiaohei.observability.otel:_init_otel:48 - Failed to initialize OpenTelemetry: No module named 'opentelemetry'
+2026-05-25 22:13:13 | INFO     | src.xiaohei.observability.otel:__init__:14 - OpenTelemetryExporter initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.observability.replay:__init__:15 - DynamicReplay initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.gateway.gateway:__init__:36 - Gateway initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.gateway.cli:__init__:24 - CLI initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.control.fsm:__init__:78 - FSM Engine initialized, current phase: AgentPhase.IDLE
+2026-05-25 22:13:13 | INFO     | src.xiaohei.cognition.task_parser:__init__:10 - TaskParser initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.cognition.planner:__init__:11 - Planner initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.execution.executor:__init__:13 - Executor initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.cognition.critic:__init__:10 - Critic initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.cognition.control_decider:__init__:9 - ControlDecider initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.cognition.reflector:__init__:10 - Reflector initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.cognition.failure_classifier:__init__:10 - FailureClassifier initialized with 10 patterns
+2026-05-25 22:13:13 | INFO     | src.xiaohei.data.checkpoint_os:_load_checkpoints:38 - Loaded 0 checkpoints
+2026-05-25 22:13:13 | INFO     | src.xiaohei.data.checkpoint_os:__init__:18 - CheckpointOS initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.control.governance:__init__:15 - Governance initialized with 7 rules
+2026-05-25 22:13:13 | INFO     | src.xiaohei.control.policy:__init__:15 - PolicyController initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.control.budget:__init__:14 - BudgetManager initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.runtime.xiaohei_mode:__init__:39 - XiaoHeiMode initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.cognition.agent_runtime:__init__:15 - AgentRuntime initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.execution.mcp_bus:__init__:15 - MCPBus initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.runtime.hermes_mode:__init__:22 - HermesMode initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.runtime.agent_os:__init__:33 - AgentOS initialized
+2026-05-25 22:13:13 | INFO     | src.xiaohei.runtime.agent_os:start:101 - AgentOS starting...
+2026-05-25 22:13:13 | INFO     | src.xiaohei.data.memory_os:start:22 - MemoryOS consolidation task started
+2026-05-25 22:13:13 | INFO     | src.xiaohei.runtime.agent_os:start:106 - AgentOS started
+2026-05-25 22:13:13 | INFO     | src.xiaohei.control.cron_scheduler:start:97 - Cron scheduler started
+2026-05-25 22:13:47 | INFO     | src.xiaohei.observability.logging:__init__:12 - LoggingManager initialized
+2026-05-25 22:13:47 | WARNING  | src.xiaohei.observability.otel:_init_otel:48 - Failed to initialize OpenTelemetry: No module named 'opentelemetry'
+2026-05-25 22:13:47 | INFO     | src.xiaohei.observability.otel:__init__:14 - OpenTelemetryExporter initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.observability.replay:__init__:15 - DynamicReplay initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.gateway.gateway:__init__:36 - Gateway initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.gateway.cli:__init__:24 - CLI initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.control.fsm:__init__:78 - FSM Engine initialized, current phase: AgentPhase.IDLE
+2026-05-25 22:13:47 | INFO     | src.xiaohei.cognition.task_parser:__init__:10 - TaskParser initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.cognition.planner:__init__:11 - Planner initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.execution.executor:__init__:13 - Executor initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.cognition.critic:__init__:10 - Critic initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.cognition.control_decider:__init__:9 - ControlDecider initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.cognition.reflector:__init__:10 - Reflector initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.cognition.failure_classifier:__init__:10 - FailureClassifier initialized with 10 patterns
+2026-05-25 22:13:47 | INFO     | src.xiaohei.data.checkpoint_os:_load_checkpoints:38 - Loaded 0 checkpoints
+2026-05-25 22:13:47 | INFO     | src.xiaohei.data.checkpoint_os:__init__:18 - CheckpointOS initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.control.governance:__init__:15 - Governance initialized with 7 rules
+2026-05-25 22:13:47 | INFO     | src.xiaohei.control.policy:__init__:15 - PolicyController initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.control.budget:__init__:14 - BudgetManager initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.runtime.xiaohei_mode:__init__:39 - XiaoHeiMode initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.cognition.agent_runtime:__init__:15 - AgentRuntime initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.execution.mcp_bus:__init__:15 - MCPBus initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.runtime.hermes_mode:__init__:22 - HermesMode initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.runtime.agent_os:__init__:33 - AgentOS initialized
+2026-05-25 22:13:47 | INFO     | src.xiaohei.runtime.agent_os:start:101 - AgentOS starting...
+2026-05-25 22:13:47 | INFO     | src.xiaohei.data.memory_os:start:22 - MemoryOS consolidation task started
+2026-05-25 22:13:47 | INFO     | src.xiaohei.runtime.agent_os:start:106 - AgentOS started
+2026-05-25 22:13:47 | INFO     | src.xiaohei.control.cron_scheduler:start:97 - Cron scheduler started

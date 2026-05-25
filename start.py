@@ -46,9 +46,11 @@ def main():
 
     elif args.mode == "web":
         print(f"启动 XiaoHei Web 模式... http://{args.host}:{args.port}")
+        import asyncio
         asyncio.run(agent_os.start())
         try:
-            asyncio.get_event_loop().run_forever()
+            import threading
+            threading.Event().wait()
         except KeyboardInterrupt:
             print("正在停止...")
             asyncio.run(agent_os.stop())
