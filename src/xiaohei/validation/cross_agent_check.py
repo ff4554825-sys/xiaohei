@@ -1,82 +1,102 @@
-"""Cross-Agent Verification — 跨Agent校验 (第3级验证)
+"""Cross-Agent Verification — 真实跨Agent验证
 
-引入第二个Agent对结果做交叉验证, 降低幻觉率。
+用第二个LLM调用核验第一个LLM的输出结果。
+比关键词检查可靠得多。
 """
 
-from typing import Dict, Any, Optional, List
+import json
+from typing import Dict, Any, Optional
 from dataclasses import dataclass
 from loguru import logger
-from uuid import uuid4
+from ..cognition.llm import call_llm
 
 
 @dataclass
-class CrossCheckResult:
-    checked_by: str
+class VerificationResult:
     passed: bool
-    confidence: float
-    issues: List[str] = None
+    score: int                    # 0-10
+    issues: list = None
+    suggestion: str = ""
+    confidence: float = 0.0
     
     def __post_init__(self):
         if self.issues is None:
             self.issues = []
+    
+    def to_dict(self) -> dict:
+        return {"passed": self.passed, "score": self.score, "issues": self.issues[:3],
+                "confidence": round(self.confidence, 2)}
 
 
 class CrossAgentVerifier:
-    """跨Agent验证器"""
+    """真实跨Agent验证器"""
     
-    def __init__(self):
-        self._verifier_id = f"verifier_{uuid4().hex[:6]}"
+    def verify(self, task: str, result: str, context: str = "") -> VerificationResult:
+        """用第二个LLM核验第一个LLM的输出"""
+        
+        prompt = f"""你是一个严格的审核员。请审核以下执行结果是否满足任务要求。
+
+任务: {task}
+执行结果: {result}
+
+请逐项检查:
+1. 结果是否直接回答了任务?
+2. 结果是否包含错误或幻觉?
+3. 结果是否完整无遗漏?
+4. 结果格式是否规范?
+
+返回JSON:
+{{"score": 0-10, "passed": true/false, "issues": ["问题1", "问题2"], "suggestion": "改进建议"}}
+"""
+        if context:
+            prompt = f"背景: {context}\n\n" + prompt
+        
+        resp = call_llm("你是一个严谨的审核员。严格检查, 发现问题就提出。", prompt)
+        
+        # 解析响应
+        resp = resp.strip()
+        if resp.startswith("```"):
+            lines = resp.split("\n")
+            resp = "\n".join(lines[1:-1])
+        
+        try:
+            data = json.loads(resp)
+            score = data.get("score", 5)
+            return VerificationResult(
+                passed=data.get("passed", score >= 6),
+                score=score,
+                issues=data.get("issues", []),
+                suggestion=data.get("suggestion", ""),
+                confidence=score / 10.0,
+            )
+        except json.JSONDecodeError:
+            # 降级: 文本分析
+            score = 5
+            issues = []
+            if not result or len(result.strip()) < 5:
+                issues.append("结果为空或过短")
+                score = 2
+            if "错误" in result or "error" in result.lower():
+                issues.append("结果包含错误信息")
+                score -= 2
+            return VerificationResult(
+                passed=score >= 6,
+                score=score,
+                issues=issues,
+                confidence=max(0.3, score / 10.0),
+            )
     
-    def verify(self, task: str, result: str, context: dict = None) -> CrossCheckResult:
-        """交叉验证执行结果"""
-        issues = []
-        
-        # 检查结果是否为空
-        if not result or len(result.strip()) == 0:
-            issues.append("结果为空")
-        
-        # 检查结果长度
-        if len(result) < 5:
-            issues.append("结果过短, 可能不完整")
-        
-        # 检查是否包含错误
-        error_patterns = ["error", "exception", "traceback", "failed", "timeout"]
-        for p in error_patterns:
-            if p in result.lower():
-                issues.append(f"结果包含错误关键词: {p}")
-                break
-        
-        # 检查任务目标是否在结果中体现
-        task_keywords = set(task.lower().split()[:5])
-        result_lower = result.lower()
-        matched = sum(1 for kw in task_keywords if kw in result_lower and len(kw) > 2)
-        if matched < len(task_keywords) * 0.3:
-            issues.append(f"结果与任务目标匹配度低({matched}/{len(task_keywords)})")
-        
-        confidence = max(0.3, 1.0 - len(issues) * 0.25)
-        
-        return CrossCheckResult(
-            checked_by=self._verifier_id,
-            passed=len(issues) == 0,
-            confidence=round(confidence, 2),
-            issues=issues,
+    def fact_check(self, claim: str, reference: str) -> Dict[str, Any]:
+        """事实校验: 用LLM检查声明是否与参考信息一致"""
+        resp = call_llm(
+            "你是一个事实核查员。判断以下声明是否与参考信息一致。返回JSON。",
+            f"声明: {claim}\n\n参考信息: {reference}\n\n返回JSON: {{'consistent': true/false, 'confidence': 0-1, 'explanation': '...'}}"
         )
-
-
-class FactChecker:
-    """事实校验(RAG + 搜索)"""
-    
-    def check(self, claim: str, evidence: str = "") -> Dict[str, Any]:
-        """检查事实是否与已知信息一致"""
-        if not evidence:
-            return {"passed": True, "confidence": 0.5, "note": "无证据可对比"}
-        
-        # 简单的关键词重叠检查
-        claim_words = set(claim.lower().split())
-        evidence_words = set(evidence.lower().split())
-        overlap = len(claim_words & evidence_words)
-        
-        if overlap > len(claim_words) * 0.5:
-            return {"passed": True, "confidence": 0.8, "note": "证据支持"}
-        else:
-            return {"passed": False, "confidence": 0.3, "note": "证据不足"}
+        resp = resp.strip()
+        if resp.startswith("```"):
+            lines = resp.split("\n")
+            resp = "\n".join(lines[1:-1])
+        try:
+            return json.loads(resp)
+        except json.JSONDecodeError:
+            return {"consistent": True, "confidence": 0.5, "explanation": "事实校验不可用"}

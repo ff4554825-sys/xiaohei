@@ -8,6 +8,8 @@ from .degradation import DegradationManager, DegradationLevel
 from .context_engine import ContextEngine, MemoryProvider
 from .tool_registry import ToolRegistry
 from .agent_runtime import AgentRuntime
+from .debate import Debate
+from .llm import call_llm, call_llm_json
 
 __all__ = [
     "TaskParser",
@@ -21,5 +23,5 @@ __all__ = [
     "ContextEngine",
     "MemoryProvider",
     "ToolRegistry",
-    "AgentRuntime",
+    "AgentRuntime", "Debate", "call_llm", "call_llm_json",
 ]
