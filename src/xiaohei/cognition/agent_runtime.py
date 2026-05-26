@@ -77,7 +77,17 @@ class AgentRuntime:
             )
 
     async def _call_llm(self, task: Task, context: Dict[str, Any], history: List[Dict[str, Any]]) -> str:
-        return "No LLM response (simulated)"
+        """真实 LLM 调用"""
+        from .llm import call_llm
+        
+        system = f"你是{self._config.name or '小黑'}, 一个智能助手。\\n任务类型: {task.type.value}\\n背景: {context}"
+        user = task.input
+        
+        # 加入历史
+        for h in history[-5:]:
+            user += f"\\n{h.get('role', 'user')}: {h.get('content', '')}"
+        
+        return call_llm(system, user)
 
     def _parse_tool_call(self, llm_response: str) -> Optional[ToolCall]:
         return None

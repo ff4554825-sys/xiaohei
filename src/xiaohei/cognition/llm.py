@@ -73,7 +73,7 @@ def call_llm(system: str, user: str, model: str = "deepseek-chat",
     
     if client is None:
         logger.warning("[llm] LLM 不可用, 返回模拟响应")
-        return _simulate_response(system, user)
+        return _fallback_response(system, user)
     
     try:
         resp = client.chat.completions.create(
@@ -90,7 +90,7 @@ def call_llm(system: str, user: str, model: str = "deepseek-chat",
         return text or ""
     except Exception as e:
         logger.error(f"[llm] 调用失败: {e}")
-        return _simulate_response(system, user)
+        return _fallback_response(system, user)
 
 
 def call_llm_json(system: str, user: str, model: str = "deepseek-chat",
@@ -110,7 +110,7 @@ def call_llm_json(system: str, user: str, model: str = "deepseek-chat",
         return {"error": "parse_failed", "raw": text[:100]}
 
 
-def _simulate_response(system: str, user: str) -> str:
+def _fallback_response(system: str, user: str) -> str:
     """LLM 不可用时的模拟响应(仅开发调试用)"""
     # 尝试从 system prompt 和 user 输入中提取有意义的响应
     user_lower = user.lower()
