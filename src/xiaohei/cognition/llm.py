@@ -16,25 +16,51 @@ except ImportError:
     _HAS_OPENAI = False
 
 
-def _resolve_api_key() -> str:
-    """从多个来源获取 API Key"""
+def _resolve_api_key(provider: str = "deepseek") -> str:
+    """从多个来源获取 API Key，支持指定 provider"""
+    env_map = {
+        "deepseek": "DEEPSEEK_API_KEY",
+        "openai": "OPENAI_API_KEY",
+        "claude": "CLAUDE_API_KEY",
+        "mimo": "MIMO_API_KEY",
+    }
+    
     # 1. 环境变量
-    key = os.environ.get("DEEPSEEK_API_KEY") or os.environ.get("OPENAI_API_KEY")
-    if key:
+    env_name = env_map.get(provider, f"{provider.upper()}_API_KEY")
+    key = os.environ.get(env_name)
+    if key and key not in ("", "your-api-key-here"):
         return key
-    # 2. 配置文件
+    
+    # 2. 项目 .env 文件
+    for env_path in [
+        Path(__file__).parent.parent.parent.parent / ".env",
+        Path.cwd() / ".env",
+    ]:
+        if env_path.exists():
+            try:
+                with open(env_path) as f:
+                    for line in f:
+                        line = line.strip()
+                        if line.startswith(f"{env_name}="):
+                            val = line.split("=", 1)[1].strip().strip("\"'")
+                            if val and val != "your-api-key-here":
+                                return val
+            except Exception:
+                pass
+    
+    # 3. 配置文件
     config_path = Path.home() / ".xiaohei" / "config.yaml"
     if config_path.exists():
         try:
             import yaml
             cfg = yaml.safe_load(config_path.read_text())
-            key = cfg.get("providers", {}).get("deepseek", {}).get("api_key", "")
-            key = key or cfg.get("providers", {}).get("openai", {}).get("api_key", "")
-            if key:
+            key = cfg.get("providers", {}).get(provider, {}).get("api_key", "")
+            if key and key not in ("", "your-api-key-here"):
                 return key
         except Exception:
             pass
-    # 3. 旧版 hermes auth
+    
+    # 4. 旧版 hermes auth
     auth_path = Path.home() / "AppData" / "Local" / "hermes" / "auth.json"
     if auth_path.exists():
         try:
@@ -48,32 +74,59 @@ def _resolve_api_key() -> str:
     return ""
 
 
-_client = None
+PROVIDER_CONFIG = {
+    "deepseek": {
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat",
+    },
+    "openai": {
+        "base_url": "https://api.openai.com/v1",
+        "model": "gpt-4o-mini",
+    },
+    "mimo": {
+        "base_url": "https://token-plan-cn.xiaomimimo.com/v1",
+        "model": "mimo-v2.5-pro",
+    },
+    "claude": {
+        "base_url": "https://api.anthropic.com/v1",
+        "model": "claude-3-sonnet-20240229",
+    },
+}
+
+_clients = {}
 
 
-def _get_client():
-    global _client
-    if _client is None:
-        api_key = _resolve_api_key()
+def _get_client(provider: str = "deepseek"):
+    global _clients
+    if provider not in _clients:
+        api_key = _resolve_api_key(provider)
         if not api_key:
-            logger.warning("[llm] 未找到 API Key, LLM 调用将返回模拟结果")
+            logger.warning(f"[llm] 未找到 {provider} API Key, 将返回模拟结果")
             return None
-        base_url = os.environ.get("LLM_BASE_URL", "https://api.deepseek.com")
+        
+        cfg = PROVIDER_CONFIG.get(provider, PROVIDER_CONFIG["deepseek"])
+        base_url = os.environ.get(f"{provider.upper()}_BASE_URL", cfg["base_url"])
+        
         if _HAS_OPENAI:
-            _client = OpenAI(api_key=api_key, base_url=f"{base_url}/v1")
+            _clients[provider] = OpenAI(api_key=api_key, base_url=str(base_url))
         else:
             logger.warning("[llm] openai 库未安装, 使用 httpx 直接调用")
-    return _client
+    return _clients.get(provider)
 
 
-def call_llm(system: str, user: str, model: str = "deepseek-chat",
-             temperature: float = 0.7, max_tokens: int = 2048) -> str:
-    """调用 LLM, 返回文本响应"""
-    client = _get_client()
+def call_llm(system: str, user: str, model: str = None,
+             provider: str = "deepseek", temperature: float = 0.7,
+             max_tokens: int = 2048) -> str:
+    """调用 LLM, 返回文本响应。可指定 provider: deepseek/openai/mimo/claude"""
+    client = _get_client(provider)
     
     if client is None:
-        logger.warning("[llm] LLM 不可用, 返回模拟响应")
+        logger.warning(f"[llm] {provider} 不可用, 返回模拟响应")
         return _fallback_response(system, user)
+    
+    # 使用 provider 默认模型
+    if model is None:
+        model = PROVIDER_CONFIG.get(provider, {}).get("model", "deepseek-chat")
     
     try:
         resp = client.chat.completions.create(
@@ -86,19 +139,18 @@ def call_llm(system: str, user: str, model: str = "deepseek-chat",
             max_tokens=max_tokens,
         )
         text = resp.choices[0].message.content
-        logger.debug(f"[llm] 响应: {text[:80]}...")
+        logger.debug(f"[llm:{provider}] 响应: {text[:80]}...")
         return text or ""
     except Exception as e:
-        logger.error(f"[llm] 调用失败: {e}")
+        logger.error(f"[llm:{provider}] 调用失败: {e}")
         return _fallback_response(system, user)
 
 
-def call_llm_json(system: str, user: str, model: str = "deepseek-chat",
-                  temperature: float = 0.3) -> dict:
+def call_llm_json(system: str, user: str, model: str = None,
+                  provider: str = "deepseek", temperature: float = 0.3) -> dict:
     """调用 LLM 并解析 JSON 响应"""
     text = call_llm(system, user + "\n\n请只返回JSON, 不要包含其他文字。", 
-                    model, temperature)
-    # 尝试提取 JSON
+                    model, provider, temperature)
     text = text.strip()
     if text.startswith("```"):
         lines = text.split("\n")
